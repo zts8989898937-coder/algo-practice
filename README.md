@@ -1,53 +1,40 @@
 # 算法练习工作区
 
-提供 C++ 模板、样例运行、调试与对拍工具。VS Code、g++、gdb、Python 等依赖需要使用者自行准备；工具中的环境相关路径需要按自己的机器配置。
+用 C++ 写题、运行样例和随机对拍，附带 VS Code 任务以及查询 Codeforces 题目和提交记录的 Python 工具。
 
-## 快速开始
+## 从终端运行样例
 
-1. 把 `template.cpp` 复制到 `problems/题目名/sol.cpp`
-2. 同目录建 `in.txt`，粘贴题目样例输入
-3. `Ctrl+Shift+B` 编译（`g++ -std=c++17 -O2 -g -Wall -DLOCAL`）
-4. `Ctrl+Shift+P` → `Tasks: Run Task` → **运行（读 in.txt）** 跑样例
-5. `F5` 启动 gdb 调试（程序会自动 `freopen("in.txt")`，直接带着样例跑）
+需要 Bash 和支持 C++17 的 g++。从仓库根目录运行下列命令，示例会输出 `6`。
 
-## 常用快捷键
-
-| 操作 | 快捷键 |
-| --- | --- |
-| 编译当前文件 | `Ctrl+Shift+B` |
-| 命令面板 | `Ctrl+Shift+P` |
-| 调试 | `F5` |
-| 断点 | 行号左侧点一下 |
-| 全局搜索 | `Ctrl+Shift+F` |
-| 打开终端 | `` Ctrl+` `` |
-
-## 对拍（找 WA 的利器）
-
-每个题目目录放三个文件：`sol.cpp`（你的解）、`brute.cpp`（暴力）、`gen.py`（随机数据）。
-
-```
-Ctrl+Shift+P → Tasks: Run Task → 对拍（sol vs brute）
+```bash
+cd problems/demo
+g++ -std=c++17 -O2 -g -Wall sol.cpp -o sol
+printf '3\n1 2 3\n' | ./sol
 ```
 
-终端里跑或者改 `N=500 bash tools/stress.sh` 跑更多组；不一致时会直接打印出错的输入、两个程序的输出。
+开始新题时，把 `template.cpp` 复制为题目目录下的 `sol.cpp`。不定义 `LOCAL` 时从标准输入读数据。定义 `LOCAL` 时，模板会从当前目录的 `in.txt` 读数据，请先准备该文件。
 
-## 代码补全
+## VS Code 运行与调试
 
-用 clangd（比 C/C++ 扩展轻，索引快）。第一次打开某个文件会在右下角显示索引进度，等它跑完 `Ctrl+Space` 就有补全、跳转、悬停提示。
+在 VS Code 中打开仓库根目录。任务面板中的「编译当前文件」直接使用 `g++`。「编译并运行」、样例输入与键盘输入任务依赖本机的 `vsc-run`，两套 gdb 启动配置依赖 `vsc-debug-build`。这两个脚本在公开仓库中未随附。移植这些任务时需配置本机工具，也可以直接使用上面的终端流程。gdb 调试配置使用 VS Code 的 C/C++ 扩展和 gdb。
 
-## 目录
+## 随机对拍
 
-```
-template.cpp        刷题模板（复制它开始）
-in.txt              根目录示例输入
-problems/demo/      对拍示例（sol + brute + gen + in.txt）
-tools/stress.sh     对拍脚本
-tools/gen.py        随机数据模板
-.vscode/            编译/运行/调试任务与 clangd 配置
-.clangd             clangd 编译参数
+需要 Python 3。每个题目目录准备 `sol.cpp`、`brute.cpp` 和 `gen.py`。从仓库根目录进入示例目录运行：
+
+```bash
+cd problems/demo
+N=200 bash ../../tools/stress.sh
 ```
 
+两份输出不一致时，脚本会打印触发错误的输入和对应输出。
 
-## 框架与路线
+## Codeforces 工具
 
-见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)、[docs/ROADMAP.md](docs/ROADMAP.md) 和 [PUBLIC_SCOPE.md](PUBLIC_SCOPE.md)。
+运行 `python3 tools/cf_tool.py --help` 查看题目查询、提交记录和建题目录命令。需要指定账号的查询可用 `CF_HANDLE` 配置。
+
+## 2026-11-18 公开版更新
+
+移除编辑器备份、已编译的示例程序和 Python 缓存，保留模板、示例源码与刷题工具。 [查看更新提交](https://github.com/zts8989898937-coder/algo-practice/commit/95b12e874dd539eb18b68e768f21eeabf004ea1f)
+
+[公开范围](PUBLIC_SCOPE.md) · [架构说明](docs/ARCHITECTURE.md) · [后续路线](docs/ROADMAP.md)
