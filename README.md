@@ -1,32 +1,6 @@
-# 刷题工作区
+# 算法练习工作区
 
-## 入口
-
-**入口地址：** `https://dsh.stillfloating.top/code/?tkn=<TOKEN>`（Token 存放于 `~/.config/secrets/code-web-token`，请勿写入公开仓库）
-
-- 服务跑在香港的 VPS（4 核 / 8G），不再绕 SSH 隧道回 X230，省掉一整跳；
-- 首次打开要再点一次「管理 → 信任」，因为工作区路径变了（/home/ubuntu/刷题）；
-- X230 上留着一份自动备份，每 15 分钟从香港同步回来（`shiti-sync.timer`）；
-- 香港服务器上的回退：`sudo systemctl restart vscode-web`。
-
-## 中文界面
-
-界面已经是中文（语言包 + 自托管翻译文件）。如果哪天又变回英文：
-
-1. `F1` → `配置显示语言` → `中文(简体)` → 重启；
-2. 还不行就在本机跑 `sudo systemctl restart vscode-web`；
-3. 补丁丢失时跑 `sudo /usr/local/bin/vscode-web-nls-fix` 再重启。
-
-原理：VS Code Web 的界面翻译默认从微软 CDN 拉取，那个 CDN 没给跨域头，浏览器静默失败就回退英文。我们把翻译文件放到了自己的 nginx（`/code/nls/…`），并把 `product.json` 的 `nlsCoreBaseUrl` 指过去。
-
-## 怎么打开（网页版）
-
-- 地址：`https://dsh.stillfloating.top/code/`
-- 需要两样东西：
-  1. 弹出 Basic Auth 时输 `zts` / 密码（存在 `~/.config/secrets/dsh-public.txt`）
-  2. 页面地址后面带 token：`?tkn=<token>`，token 存在 `~/.config/secrets/code-web-token`
-- 第一次打开会看到蓝色 **Restricted Mode** 横幅：点 `Manage` → `Trust`（“是的，我信任此文件夹的作者”）。信任状态按浏览器保存，点一次就够；不信任时扩展（clangd 补全）不会启动。
-- 打开文件后等右下角 clangd 索引跑完（`bits/stdc++.h` 大约 10 秒），再按补全才有候选。
+提供 C++ 模板、样例运行、调试与对拍工具。VS Code、g++、gdb、Python 等依赖需要使用者自行准备；工具中的环境相关路径需要按自己的机器配置。
 
 ## 快速开始
 
@@ -73,22 +47,7 @@ tools/gen.py        随机数据模板
 .clangd             clangd 编译参数
 ```
 
-## 终端：fish + starship
 
-- 默认 shell 已改成 fish（`/usr/bin/fish`），提示符由 starship 渲染：目录/分支/耗时/右侧时间，配色偏 Tokyo Night；
-- 只用常见 Unicode 字符（`❯`），不依赖 Nerd Font，所以不会出现方框；
-- 常用缩写：`ll`、`la`、`gs`、`gd`、`run`（跑 ./a.out）、`h`（hermes）、`hy`（hermes --yolo）；
-- 配置文件：`~/.config/fish/config.fish`、`~/.config/starship.toml`；改完新开终端即生效。
+## 框架与路线
 
-## Hermes（AI agent，在香港服务器上）
-
-```bash
-hermes --version          # v0.22.5
-hermes                     # 交互式
-hermes --yolo              # 全自动：危险命令不再逐条确认
-hermes chat -q "..." --yolo --max-turns 30
-hy                         # 等价于 hermes --yolo
-```
-
-配置与密钥沿用 X230 那份（`~/.hermes/config.yaml` + `~/.hermes/.env`），默认模型 deepseek-v4-pro。
-`--checkpoints` 可在破坏性文件操作前打快照，`/rollback` 恢复。
+见 [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)、[docs/ROADMAP.md](docs/ROADMAP.md) 和 [PUBLIC_SCOPE.md](PUBLIC_SCOPE.md)。
