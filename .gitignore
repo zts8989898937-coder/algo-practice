@@ -1,0 +1,8 @@
+.clangd/
+.cache/
+*.out
+*.exe
+in.txt
+moto
+m
+n

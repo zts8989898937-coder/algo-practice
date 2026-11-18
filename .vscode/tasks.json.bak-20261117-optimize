@@ -1,0 +1,214 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "按需编译当前文件",
+      "type": "process",
+      "command": "/usr/bin/g++",
+      "args": [
+        "-std=c++17",
+        "-O0",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-DLOCAL",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}.debug",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": "build",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "clear": false
+      }
+    },
+    {
+      "label": "编译并运行",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run in \"${file}\"",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "编译当前文件",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-O2",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-DLOCAL",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": "build",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "运行（读 in.txt）",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run in \"${file}\"",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "运行（键盘输入）",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run kbd \"${file}\"",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "对拍（sol vs brute）",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/tools/stress.sh",
+        "sol.cpp",
+        "brute.cpp"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    },
+    {
+      "label": "计时运行（读 in.txt）",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run o2 \"${file}\"",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    },
+    {
+      "label": "CF: 拉取题目并创建目录",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/tools/cf_tool.py",
+        "sync",
+        "${input:cfProblem}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "CF: 查看近期提交",
+      "type": "shell",
+      "command": "python3",
+      "args": [
+        "${workspaceFolder}/tools/cf_tool.py",
+        "subs",
+        "-n",
+        "15"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "CF: 查看未过错题",
+      "type": "shell",
+      "command": "python3",
+        "args": [
+        "${workspaceFolder}/tools/cf_tool.py",
+        "wrongs",
+        "-n",
+        "15"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "cfProblem",
+      "type": "promptString",
+      "description": "输入 Codeforces 题号或链接（例如 2037C 或 https://codeforces.com/contest/2037/problem/C）"
+    }
+  ]
+}

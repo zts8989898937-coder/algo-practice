@@ -1,0 +1,145 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "按需编译当前文件",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "-c",
+        "out=\"$1\"; src=\"$2\"; [ -f in.txt ] || : > in.txt; pch=\"\"; [ -f /opt/pch/gdb/bits/stdc++.h.gch ] && pch=\"-I/opt/pch/gdb\"; if [ -x \"$out\" ] && [ \"$out\" -nt \"$src\" ]; then echo \"[skip] 二进制已是最新\"; else exec g++ -std=c++17 -O0 -g -Wall -Wextra -DLOCAL $pch -o \"$out\" \"$src\"; fi",
+        "--",
+        "${fileDirname}/${fileBasenameNoExtension}",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": "build",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "reveal": "silent",
+        "panel": "shared",
+        "clear": false
+      }
+    },
+    {
+      "label": "编译并运行",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run in \"${file}\"",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "编译当前文件",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "-std=c++17",
+        "-O2",
+        "-g",
+        "-Wall",
+        "-Wextra",
+        "-DLOCAL",
+        "-o",
+        "${fileDirname}/${fileBasenameNoExtension}",
+        "${file}"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "group": "build",
+      "problemMatcher": [
+        "$gcc"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      }
+    },
+    {
+      "label": "运行（读 in.txt）",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run in \"${file}\"",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "运行（键盘输入）",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run kbd \"${file}\"",
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true,
+        "clear": true
+      }
+    },
+    {
+      "label": "对拍（sol vs brute）",
+      "type": "shell",
+      "command": "bash",
+      "args": [
+        "${workspaceFolder}/tools/stress.sh",
+        "sol.cpp",
+        "brute.cpp"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    },
+    {
+      "label": "计时运行（读 in.txt）",
+      "type": "shell",
+      "command": "/usr/local/bin/vsc-run o2 \"${file}\"",
+      "args": [
+        "-c",
+        "time ./${fileBasenameNoExtension} < in.txt"
+      ],
+      "options": {
+        "cwd": "${fileDirname}"
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "focus": true
+      }
+    }
+  ]
+}
